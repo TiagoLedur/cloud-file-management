@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -35,6 +36,10 @@ public class S3Controller {
                 .body(new InputStreamResource(s3Object.getObjectContent()));
     }
 
+    @GetMapping("/list")
+    public ResponseEntity<List<String>> listFiles() {
+        return ResponseEntity.ok(s3Service.listFiles());
+    }
 
     @DeleteMapping("/delete/{fileName}")
     public ResponseEntity<String> deleteFile(@PathVariable String fileName) {
