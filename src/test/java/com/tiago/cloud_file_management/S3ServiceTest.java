@@ -7,12 +7,15 @@ import com.tiago.cloud_file_management.exceptions.FileUploadException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,27 +23,38 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class S3ServiceTest {
-
     private static final String BUCKET_NAME = "file-management-bucket05012005";
-
+    private static final String HASHES = "hashes/";
     @Mock
     private AmazonS3 amazonS3;
-
     @InjectMocks
     private S3Service s3Service;
 
     //UPLOAD
     @Test
-    @DisplayName("Testa se o arquivo é enviado para o S3")
+    @DisplayName("Testa se o arquivo é enviado para o S3 e verifica se o hash é gerado corretamente")
     void testUploadFile() throws IOException {
         MultipartFile mockFile = mock(MultipartFile.class);
         when(mockFile.isEmpty()).thenReturn(false);
         when(mockFile.getOriginalFilename()).thenReturn("test.txt");
 
-        String fileName = s3Service.uploadFile(mockFile);
+        InputStream inputStream = new ByteArrayInputStream("conteúdo do arquivo".getBytes());
+        when(mockFile.getInputStream()).thenReturn(inputStream);
+
+        String expectedHash = s3Service.generateFileHash(inputStream);
+
+        when(amazonS3.doesObjectExist(eq(BUCKET_NAME), eq(HASHES + expectedHash))).thenReturn(false);
+
+        S3Service s3ServiceMock = spy(s3Service);
+        doReturn(expectedHash).when(s3ServiceMock).generateFileHash(inputStream);
+
+        String fileName = s3ServiceMock.uploadFile(mockFile);
 
         assertNotNull(fileName);
-        verify(amazonS3).putObject(any(PutObjectRequest.class));
+        verify(amazonS3).putObject(eq(BUCKET_NAME), matches("\\d+-test.txt"), any(InputStream.class), isNull());
+        verify(amazonS3).putObject(eq(BUCKET_NAME), eq(HASHES + expectedHash), any(InputStream.class), any(ObjectMetadata.class));
+
+        verify(amazonS3).doesObjectExist(eq(BUCKET_NAME), eq(HASHES + expectedHash));
     }
 
     @Test
@@ -71,28 +85,38 @@ class S3ServiceTest {
         assertEquals(mockS3Object, result);
     }
 
-
     @Test
     @DisplayName("Testa a exceção ao tentar baixar arquivo inexistente")
     void testDownloadFileNotFound() {
         when(amazonS3.doesObjectExist(BUCKET_NAME, "nonexistent.txt")).thenReturn(false);
 
         FileNotFoundException thrown = assertThrows(FileNotFoundException.class, () -> s3Service.downloadFile("nonexistent.txt"));
-        assertEquals("Arquivo não encontrado no S3: nonexistent.txt", thrown.getMessage());
+        assertEquals("Arquivo não encontrado no bucket: nonexistent.txt", thrown.getMessage());
     }
-
-
 
     //DELETE
     @Test
     @DisplayName("Testa se o arquivo existente está sendo deletado")
-    void testDeleteFile() {
-        when(amazonS3.doesObjectExist(BUCKET_NAME, "test.txt")).thenReturn(true);
+    void testDeleteFile() throws IOException {
+        String fileName = "existent-file.txt";
+        S3Object mockFile = new S3Object();
+        InputStream inputStream = new ByteArrayInputStream("conteúdo do arquivo".getBytes());
+        mockFile.setObjectContent(inputStream);
+        when(amazonS3.doesObjectExist(BUCKET_NAME, fileName)).thenReturn(true);
+        when(amazonS3.getObject(BUCKET_NAME, fileName)).thenReturn(mockFile);
 
-        s3Service.deleteFile("test.txt");
+        ArgumentCaptor<String> bucketCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> keyCaptor = ArgumentCaptor.forClass(String.class);
 
-        verify(amazonS3).deleteObject(BUCKET_NAME, "test.txt");
+        s3Service.deleteFile(fileName);
+
+        verify(amazonS3, times(2)).deleteObject(bucketCaptor.capture(), keyCaptor.capture());
+
+        List<String> capturedKeys = keyCaptor.getAllValues();
+        assertTrue(capturedKeys.contains(fileName));
+        assertTrue(capturedKeys.stream().anyMatch(key -> key.startsWith(HASHES)));
     }
+
 
     @Test
     @DisplayName("Testa a exceção ao tentar deletar arquivo inexistente")
@@ -102,7 +126,6 @@ class S3ServiceTest {
         FileNotFoundException thrown = assertThrows(FileNotFoundException.class, () -> s3Service.deleteFile("nonexistent.txt"));
         assertEquals("Arquivo não encontrado para exclusão: nonexistent.txt", thrown.getMessage());
     }
-
 
     //LIST
     @Test
