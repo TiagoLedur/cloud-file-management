@@ -52,7 +52,7 @@ public class S3Service {
         return "Arquivo upado para o bucket com sucesso: " + uniqueFileName;
     }
 
-    private String generateFileHash(InputStream inputStream) throws IOException {
+    public String generateFileHash(InputStream inputStream) throws IOException {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] buffer = new byte[1024];
@@ -108,8 +108,6 @@ public class S3Service {
             throw new FileNotFoundException("Erro ao tentar excluir o arquivo: " + fileName);
         }
     }
-
-
 }
 
 
