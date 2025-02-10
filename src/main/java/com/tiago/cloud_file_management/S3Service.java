@@ -12,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
@@ -22,6 +24,22 @@ public class S3Service {
     private final AmazonS3 amazonS3;
     private static final String BUCKET_NAME = "file-management-bucket05012005";
     private static final String HASHES = "hashes/";
+    private static final List<String> ALLOWED_MIME_TYPES = List.of(
+            // Imagens
+            "image/jpeg", "image/png", "image/gif",
+
+            // Documentos
+            "application/pdf",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+
+            // Arquivos de texto e estruturados
+            "text/plain",
+            "text/csv",
+            "application/json",
+            "application/xml"
+    );
 
     @Autowired
     public S3Service(AmazonS3 amazonS3) {
@@ -34,11 +52,18 @@ public class S3Service {
      * @param file O arquivo a ser enviado.
      * @return Uma mensagem confirmando o sucesso do upload.
      * @throws IOException Se ocorrer um erro ao ler o arquivo.
+     * @throws IllegalArgumentException Se o tipo do arquivo não for permitido.
      * @throws FileUploadException Se o arquivo já existir no bucket ou não for fornecido.
      */
     public String uploadFile(MultipartFile file) throws IOException {
         if (file.isEmpty()) {
             throw new FileUploadException("Arquivo para upload não selecionado.");
+        }
+
+        String mimeType = Files.probeContentType(Path.of(file.getOriginalFilename()));
+
+        if (mimeType == null || !ALLOWED_MIME_TYPES.contains(mimeType)) {
+            throw new IllegalArgumentException("Tipo de arquivo não permitido.");
         }
 
         String fileHash = generateFileHash(file.getInputStream());
