@@ -49,6 +49,18 @@ Se quiser rodar o projeto localmente com um S3 próprio, você também precisar�
 | **GET**  | `/api/download/{filename}` | Faz o download do arquivo |
 | **DELETE** | `/api/delete/{filename}` | Exclui um arquivo do S3 |
 
+## 🌐 Arquitetura da API
+
+A API segue a estrutura abaixo para gerenciar arquivos na nuvem:
+
+```mermaid
+graph LR
+    A[Cliente] -->|Requisição| B[API - Cloud File Management]
+    B -->|Armazena/Recupera/Exclui| C[Amazon S3]
+    C -->|Retorno| B
+    B -->|Resposta| A
+```
+
 ## 🛠️ Como Testar no Postman
 
 ### 🔹 Listar Arquivos
