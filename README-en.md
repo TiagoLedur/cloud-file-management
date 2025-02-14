@@ -49,6 +49,18 @@ If you want to run the project locally with your own S3, you will also need:
 | **GET**  | `/api/download/{filename}` | Downloads a file |
 | **DELETE** | `/api/delete/{filename}` | Deletes a file from S3 |
 
+## 🌐 API Architecture
+
+The API follows the structure below to manage files in the cloud:
+
+```mermaid
+graph LR
+    A[Client] -->|Request| B[API - Cloud File Management]
+    B -->|Store/Retrieve/Delete| C[Amazon S3]
+    C -->|Response| B
+    B -->|Reply| A
+```
+
 ## 🛠️ How to Test in Postman
 
 ### 🔹 List Files
