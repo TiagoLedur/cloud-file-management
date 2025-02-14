@@ -4,6 +4,7 @@
 ![AWS S3](https://img.shields.io/badge/AWS%20S3-Storage-orange?logo=amazons3&logoColor=white)
 ![Amazon EC2](https://img.shields.io/badge/Amazon%20EC2-Cloud-orange?logo=amazonaws&logoColor=white)
 
+### [Read this in English](README-en.md)
 
 # Cloud File Management
 
