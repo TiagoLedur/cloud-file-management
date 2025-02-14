@@ -6,6 +6,8 @@
 
 # Cloud File Management
 
+### [Leia isso em português](README.md)
+
 ## 📌 About the Project
 
 **Cloud File Management** is a REST API developed in **Java** with **Spring Boot**, designed to manage files stored in **Amazon S3**. The API allows **listing, uploading, downloading, and deleting** files securely, using hashing for integrity control and ensuring a robust structure for cloud storage management.
