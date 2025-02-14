@@ -91,7 +91,7 @@ Os testes cobrem a lógica de **hash**, **armazenamento no S3**,  **exclusão de
 
 ## 📜 Licença
 
-Este projeto é distribuído sob a licença **MIT**.
+Este projeto é distribuído sob a [Licença MIT](https://opensource.org/licenses/MIT).
 
 ---
 📌 **Mantenedor:** [Tiago Ledur](https://github.com/TiagoLedur)
