@@ -91,7 +91,7 @@ The tests cover the logic of **hashing**, **S3 storage**, **file deletion**, **d
 
 ## 📜 License
 
-This project is distributed under the **MIT** license.
+This project is distributed under the [MIT License](https://opensource.org/licenses/MIT).
 
 ---
 📌 **Maintainer:** [Tiago Ledur](https://github.com/TiagoLedur)
