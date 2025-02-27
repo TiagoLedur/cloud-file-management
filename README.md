@@ -33,7 +33,7 @@ Atualmente, a aplicação está rodando em uma instância **AWS EC2**, utilizand
 
 Para consumir essa API eu recomendo que use o Postman ou outra ferramenta parecida:  
 
-- [Postman](https://www.postman.com/)  
+- [Postman](https://www.postman.com/download)  
 
 Se quiser rodar o projeto localmente com um S3 próprio, você também precisará de:  
 
@@ -99,7 +99,7 @@ Arquivo deletado com sucesso.
 ``
 
 ## 🧪 Testes  
-Os testes cobrem a lógica de **hash**, **armazenamento no S3**,  **exclusão de arquivos**, **download** e **listagem de arquivos**, garantindo a integridade das operações.  
+Os testes cobrem a **lógica de hash**, **armazenamento no S3**,  **exclusão de arquivos**, **download** e **listagem de arquivos**, garantindo a integridade das operações.  
 
 ## 📜 Licença
 
