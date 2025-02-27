@@ -33,7 +33,7 @@ Currently, the application is running on an **AWS EC2** instance, using **Docker
 
 To consume this API, I recommend using Postman or a similar tool:
 
-- [Postman](https://www.postman.com/)
+- [Postman](https://www.postman.com/download)
 
 If you want to run the project locally with your own S3, you will also need:
 
@@ -101,7 +101,7 @@ graph LR
   ```
 
 ## 🧪 Tests  
-The tests cover the logic of **hashing**, **S3 storage**, **file deletion**, **download**, and **file listing**, ensuring the integrity of operations.
+The tests cover the **logic of hashing**, **S3 storage**, **file deletion**, **download**, and **file listing**, ensuring the integrity of operations.
 
 ## 📜 License
 
