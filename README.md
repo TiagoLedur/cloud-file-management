@@ -24,10 +24,14 @@ Atualmente, a aplicação está rodando em uma instância **AWS EC2**, utilizand
 - **Maven**
 - **JUnit 5**
 - **Mockito**
--  **AWS EC2** (instância onde a API está hospedada)
+-  **AWS EC2** (instância onde a API está hospedada [**desativado**])
 - **Docker** (utilizado para rodar o projeto dentro da instância EC2)
 
 ## 🚀 Como Consumir o Projeto
+
+### ⚠ Aviso
+
+A instância ec2 onde estava rodando o projeto foi desativada portanto deve-se testar apenas localmente o projeto, agradeço pela compreensão.
 
 ### 🔧 Pré-requisitos  
 
@@ -65,7 +69,7 @@ graph LR
 
 ### 🔹 Listar Arquivos
 - **Método:** `GET`
-- **URL:** `http://56.125.18.57:8080/api/list`
+- **URL:** `http://localhost:8080/api/list`
 - **Resposta esperada (exemplo)**:
   ```json
   [
@@ -75,7 +79,7 @@ graph LR
   ]
 ### 🔹 Fazer Upload de Arquivo
 - **Método:** `POST`
-- **URL:** `http://56.125.18.57:8080/api/upload`
+- **URL:** `http://localhost:8080/api/upload`
 - **Body:**
 	-   Escolha `form-data`
 	-   Adicione uma chave chamada **file** e carregue um arquivo local
@@ -86,13 +90,13 @@ Arquivo upado para o bucket com sucesso: 1739391218813-test.txt
 ---
 ### 🔹 Fazer Download de Arquivo
 -  **Como usar:** Use a URL abaixo e substitua `arquivo.txt` pelo nome do arquivo desejado e a extensão do mesmo.
-- **URL:** `http://56.125.18.57:8080/api/download/arquivo.txt`
+- **URL:** `http://localhost:8080/api/download/arquivo.txt`
 - **Resultado**: Ao inserir a URL no navegador o arquivo será baixado automaticamente.
 ---
 ### 🔹 Excluir Arquivo
 - **Método:** `DELETE`
 -  **Como usar:** Use a URL abaixo e substitua `arquivo.txt` pelo nome do arquivo desejado e a extensão do mesmo.
-- **URL:** `http://56.125.18.57:8080/api/delete/arquivo.txt`
+- **URL:** `http://localhost:8080/api/delete/arquivo.txt`
 - **Resposta esperada (exemplo)**:
   ``
 Arquivo deletado com sucesso.
