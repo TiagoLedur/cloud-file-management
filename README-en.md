@@ -25,9 +25,12 @@ Currently, the application is running on an **AWS EC2** instance, using **Docker
 - **JUnit 5**
 - **Mockito**
 - **AWS EC2** (instance where the API is hosted)
-- **Docker** (used to run the project inside the EC2 instance)
+- **Docker** (used to run the project inside the EC2 instance [deactivated])
 
 ## 🚀 How to Use the Project
+
+### ⚠ Warning
+The EC2 instance where the project was running has been deactivated, so the project should only be tested locally. I appreciate your understanding.
 
 ### 🔧 Prerequisites
 
@@ -65,7 +68,7 @@ graph LR
 
 ### 🔹 List Files
 - **Method:** `GET`
-- **URL:** `http://56.125.18.57:8080/api/list`
+- **URL:** `http://localhost:8080/api/list`
 - **Expected Response (example):**
   ```json
   [
@@ -77,7 +80,7 @@ graph LR
 
 ### 🔹 Upload a File
 - **Method:** `POST`
-- **URL:** `http://56.125.18.57:8080/api/upload`
+- **URL:** `http://localhost:8080/api/upload`
 - **Body:**
   - Select `form-data`
   - Add a key named **file** and upload a local file
@@ -88,13 +91,13 @@ graph LR
 ---
 ### 🔹 Download a File
 - **How to use:** Use the URL below and replace `file.txt` with the desired filename and its extension.
-- **URL:** `http://56.125.18.57:8080/api/download/file.txt`
+- **URL:** `http:localhost:8080/api/download/file.txt`
 - **Result:** When entering the URL in the browser, the file will be downloaded automatically.
 ---
 ### 🔹 Delete a File
 - **Method:** `DELETE`
 - **How to use:** Use the URL below and replace `file.txt` with the desired filename and its extension.
-- **URL:** `http://56.125.18.57:8080/api/delete/file.txt`
+- **URL:** `http://localhost/api/delete/file.txt`
 - **Expected Response (example):**
   ```
   Arquivo deletado com sucesso.
